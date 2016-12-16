@@ -11,13 +11,16 @@ import javax.inject.Inject
  * Created by trevorwang on 08/12/2016.
  */
 class RestApi @Inject constructor() {
+    val clientId = "6e4e8221c0dcbd375140"
+    val clientSecret = "aadd49231fea44e5e1302cedcbfa757013b20516"
+    val githubApi = "https://api.github.com/"
 
     fun createRetrofit(): Retrofit {
         return Retrofit.Builder()
                 .client(okHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl("http://httpbin.org/")
+                .baseUrl(githubApi)
                 .build()
     }
 
