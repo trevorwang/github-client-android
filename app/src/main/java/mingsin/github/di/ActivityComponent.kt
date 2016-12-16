@@ -1,7 +1,7 @@
 package mingsin.github.di
 
 import dagger.Component
-import mingsin.github.MainActivity
+import mingsin.github.view.MainActivity
 
 /**
  * Created by trevorwang on 10/12/2016.
