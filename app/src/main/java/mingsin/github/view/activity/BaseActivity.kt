@@ -1,4 +1,4 @@
-package mingsin.github.view
+package mingsin.github.view.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -20,13 +20,11 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val app = application as? App
-        if (app != null) {
-            activityComponent = DaggerActivityComponent.builder()
-                    .appComponent(app.component)
-                    .activityModule(ActivityModule(this)).build()
-            onInject()
-        }
+        val app = application as App
+        activityComponent = DaggerActivityComponent.builder()
+                .appComponent(app.component)
+                .activityModule(ActivityModule(this)).build()
+        onInject()
     }
 
     /**
