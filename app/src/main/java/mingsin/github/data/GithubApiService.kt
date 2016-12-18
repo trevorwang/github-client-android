@@ -15,4 +15,5 @@ interface GithubApiService {
     fun contributors(
             @Path("owner") owner: String,
             @Path("repo") repo: String): Observable<List<Contributor>>
+
 }

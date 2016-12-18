@@ -18,6 +18,8 @@ class App : Application() {
     }
 
     fun initComp(): AppComponent {
-        return DaggerAppComponent.builder().appModule(AppModule(this)).build()
+        return DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .build()
     }
 }

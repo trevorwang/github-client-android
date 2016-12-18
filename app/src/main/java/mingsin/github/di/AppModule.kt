@@ -4,6 +4,8 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import mingsin.github.App
+import mingsin.github.data.GithubApiService
+import mingsin.github.data.RestApi
 import javax.inject.Singleton
 
 /**
@@ -20,6 +22,12 @@ class AppModule(val app: App) {
     @Provides
     @Singleton
     fun context(): Context {
-        return app.applicationContext
+        return app
+    }
+
+    @Provides
+    @Singleton
+    fun provideGithubApiService(retrofit: RestApi): GithubApiService {
+        return retrofit.createRetrofit().create(GithubApiService::class.java)
     }
 }

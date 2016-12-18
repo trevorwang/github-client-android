@@ -6,10 +6,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by trevorwang on 08/12/2016.
  */
+@Singleton
 class RestApi @Inject constructor() {
     val clientId = "6e4e8221c0dcbd375140"
     val clientSecret = "aadd49231fea44e5e1302cedcbfa757013b20516"

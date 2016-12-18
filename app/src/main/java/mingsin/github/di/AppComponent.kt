@@ -3,6 +3,7 @@ package mingsin.github.di
 import android.content.Context
 import dagger.Component
 import mingsin.github.App
+import mingsin.github.data.GithubApiService
 import javax.inject.Singleton
 
 /**
@@ -13,4 +14,5 @@ import javax.inject.Singleton
 interface AppComponent {
     fun app(): App
     fun context(): Context
+    fun api(): GithubApiService
 }
