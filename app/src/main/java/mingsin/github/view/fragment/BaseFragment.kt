@@ -7,13 +7,14 @@ import mingsin.github.di.ActivityComponent
 import mingsin.github.di.ActivityModule
 import mingsin.github.di.DaggerActivityComponent
 import mingsin.github.view.activity.BaseActivity
+import rx.subscriptions.CompositeSubscription
 
 /**
  * Created by trevorwang on 17/12/2016.
  */
 abstract class BaseFragment : Fragment() {
     lateinit var activityComponent: ActivityComponent
-
+    var subscriptions = CompositeSubscription()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,6 +23,11 @@ abstract class BaseFragment : Fragment() {
                 .appComponent(app.component)
                 .activityModule(ActivityModule(activity as BaseActivity)).build()
         onInject()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        subscriptions.clear()
     }
 
     /**

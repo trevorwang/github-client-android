@@ -1,5 +1,8 @@
 package mingsin.github.data
 
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,7 +23,7 @@ class RestApi @Inject constructor() {
     fun createRetrofit(): Retrofit {
         return Retrofit.Builder()
                 .client(okHttpClient())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(createGson()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(githubApi)
                 .build()
@@ -32,5 +35,9 @@ class RestApi @Inject constructor() {
         return OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .build()
+    }
+
+    private fun createGson(): Gson {
+        return GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
     }
 }

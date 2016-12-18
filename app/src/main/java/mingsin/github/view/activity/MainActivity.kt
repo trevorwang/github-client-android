@@ -29,11 +29,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.navView.setNavigationItemSelectedListener(this)
 
         val fragment = TrendingFragment()
-        swithTo(fragment)
+        switchTo(fragment)
 
     }
 
-    fun swithTo(fragment: Fragment) {
+    fun switchTo(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
 
@@ -53,11 +53,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when (item.itemId) {
             R.id.nav_camera -> {
                 val fragment = DashboardFragment()
-                swithTo(fragment)
+                switchTo(fragment)
             }
 
             R.id.nav_gallery -> {
-                swithTo(TrendingFragment())
+                switchTo(TrendingFragment())
             }
         }
         drawer.closeDrawer(GravityCompat.START)
