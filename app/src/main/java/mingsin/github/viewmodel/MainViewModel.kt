@@ -3,7 +3,7 @@ package mingsin.github.viewmodel
 import android.content.Context
 import android.databinding.adapters.TextViewBindingAdapter
 import android.view.View
-import android.widget.Toast
+import mingsin.github.extension.toast
 import javax.inject.Inject
 
 /**
@@ -15,13 +15,4 @@ class MainViewModel @Inject constructor(val context: Context) : ViewModel<String
         context.toast(text.value)
     }
     val textChange = TextViewBindingAdapter.AfterTextChanged { println(it.toString()) }
-}
-
-
-fun Context.toast(message: String, time: Int) {
-    Toast.makeText(this, message, time).show()
-}
-
-fun Context.toast(message: String) {
-    toast(message, Toast.LENGTH_SHORT)
 }
