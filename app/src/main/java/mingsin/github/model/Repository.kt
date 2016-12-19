@@ -7,7 +7,7 @@ import java.util.*
  */
 data class Repository(var id: Int,
                       var name: String,
-                      var owner: Owner,
+                      var owner: User,
                       var private: Boolean,
                       var htmlUrl: String,
                       var description: String,

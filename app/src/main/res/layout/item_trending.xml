@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,22 +8,45 @@
             type="mingsin.github.model.Repository" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="?attr/listPreferredItemPaddingLeft">
 
         <TextView
+            android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{repo.name}"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
+            android:id="@+id/tv_desc"
+            style="?subtitleTextColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{repo.fullName}"
-            android:textAppearance="?attr/textAppearanceListItemSmall" />
-    </LinearLayout>
+            android:layout_below="@+id/tv_name"
+            android:layout_marginBottom="4dp"
+            android:text="@{repo.description}" />
+
+        <TextView
+            android:id="@+id/tv_star"
+            style="?subtitleTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_desc"
+            tools:text="300"
+            android:text="@{String.valueOf(repo.stargazersCount)}" />
+
+        <TextView
+            style="?subtitleTextColor"
+            android:layout_marginLeft="20dp"
+            tools:text="Java"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_star"
+            android:layout_toRightOf="@+id/tv_star"
+            android:text="@{repo.language}" />
+    </RelativeLayout>
 </layout>

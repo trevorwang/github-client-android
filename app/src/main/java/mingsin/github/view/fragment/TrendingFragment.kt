@@ -49,7 +49,7 @@ class TrendingFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        subscriptions.add(api.trending("created:>2016-12-17").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        subscriptions.add(api.trending("created:>2016-12-17 stars:>1").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Logger.v("get repos %s", it)
                     adapter.repos = it.items
