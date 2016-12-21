@@ -19,6 +19,7 @@ import mingsin.github.data.GithubApiService
 import mingsin.github.databinding.FragmentTrendingBinding
 import mingsin.github.databinding.ItemTrendingBinding
 import mingsin.github.model.Repository
+import mingsin.github.view.InfiniteScrollListener
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.*
@@ -47,14 +48,27 @@ class TrendingFragment : BaseFragment() {
         adapter = TrendingAdapter(context, lanUtils)
         binding.rvRepos.adapter = adapter
         binding.rvRepos.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+
+
+        binding.rvRepos.addOnScrollListener(object : InfiniteScrollListener(10) {
+            override fun loadMore() {
+                Logger.v("loadMore...........")
+                loadData(adapter.repos.last().id.toString())
+            }
+        })
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        subscriptions.add(api.trending("created:>2016-12-17").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        loadData()
+    }
+
+    private fun loadData(since: String? = null) {
+        subscriptions.add(api.trending("created:>2016-12-17", "star", "desc", since).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Logger.v("get repos %s", it)
-                    adapter.repos = it.items
+                    adapter.repos += it.items
                 }) {
                     Logger.e(it, "")
                 })
