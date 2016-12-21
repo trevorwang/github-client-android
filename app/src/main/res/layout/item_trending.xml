@@ -6,6 +6,10 @@
         <variable
             name="repo"
             type="mingsin.github.model.Repository" />
+
+        <variable
+            name="lanUtility"
+            type="mingsin.github.LanguageUtility" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,17 +40,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_desc"
-            tools:text="300"
-            android:text="@{String.valueOf(repo.stargazersCount)}" />
+            android:text="@{String.valueOf(repo.stargazersCount)}"
+            tools:text="300" />
 
         <TextView
-            style="?subtitleTextColor"
-            android:layout_marginLeft="20dp"
-            tools:text="Java"
+            android:id="@+id/tv_lan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/tv_star"
+            android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/tv_star"
-            android:text="@{repo.language}" />
+            android:text="@{repo.language}"
+            android:textColor='@{lanUtility.colorConfig.get(repo.language)}'
+            tools:text="Java" />
     </RelativeLayout>
 </layout>

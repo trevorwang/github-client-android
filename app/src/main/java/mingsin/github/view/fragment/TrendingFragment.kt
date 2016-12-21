@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.orhanobut.logger.Logger
+import mingsin.github.LanguageUtility
 import mingsin.github.R
 import mingsin.github.data.GithubApiService
 import mingsin.github.databinding.FragmentTrendingBinding
@@ -28,6 +29,7 @@ import javax.inject.Inject
  */
 class TrendingFragment : BaseFragment() {
     @Inject lateinit var api: GithubApiService
+    @Inject lateinit var lanUtils: LanguageUtility
     lateinit var adapter: TrendingAdapter
     override fun onInject() {
         activityComponent.inject(this)
@@ -42,14 +44,14 @@ class TrendingFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val binding = DataBindingUtil.getBinding<FragmentTrendingBinding>(view)
         binding.rvRepos.layoutManager = LinearLayoutManager(context)
-        adapter = TrendingAdapter(context)
+        adapter = TrendingAdapter(context, lanUtils)
         binding.rvRepos.adapter = adapter
         binding.rvRepos.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        subscriptions.add(api.trending("created:>2016-12-17 stars:>1").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        subscriptions.add(api.trending("created:>2016-12-17").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Logger.v("get repos %s", it)
                     adapter.repos = it.items
@@ -60,7 +62,7 @@ class TrendingFragment : BaseFragment() {
 
     class ItemHolder<out T : ViewDataBinding>(val binding: T) : RecyclerView.ViewHolder(binding.root)
 
-    class TrendingAdapter(val context: Context) : RecyclerView.Adapter<ItemHolder<ItemTrendingBinding>>() {
+    class TrendingAdapter(val context: Context, val languageUtility: LanguageUtility) : RecyclerView.Adapter<ItemHolder<ItemTrendingBinding>>() {
         var repos: List<Repository> = ArrayList()
             set(value) {
                 field = value
@@ -76,6 +78,7 @@ class TrendingFragment : BaseFragment() {
         override fun onBindViewHolder(holder: ItemHolder<ItemTrendingBinding>?, position: Int) {
             val repo = repos[position]
             holder?.binding?.repo = repo
+            holder?.binding?.lanUtility = languageUtility
             holder?.binding?.root?.setOnClickListener { v ->
                 openProjectPage(repo)
             }
