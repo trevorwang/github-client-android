@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -19,7 +18,6 @@ import mingsin.github.data.GithubApiService
 import mingsin.github.databinding.FragmentTrendingBinding
 import mingsin.github.databinding.ItemTrendingBinding
 import mingsin.github.databinding.RecyclerviewFooterBinding
-import mingsin.github.extension.toast
 import mingsin.github.model.Repository
 import mingsin.github.view.InfiniteScrollListener
 import rx.android.schedulers.AndroidSchedulers
@@ -49,7 +47,6 @@ class TrendingFragment : BaseFragment() {
         binding.rvRepos.layoutManager = LinearLayoutManager(context)
         adapter = TrendingAdapter(context, lanUtils)
         binding.rvRepos.adapter = adapter
-//        binding.rvRepos.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         binding.rvRepos.addOnScrollListener(object : InfiniteScrollListener(10) {
             override fun loadMore(page: Int) {
                 Logger.v("loadMore.......page : %d", page)
