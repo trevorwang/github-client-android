@@ -8,8 +8,9 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 /**
  * Created by trevorwang on 21/12/2016.
  */
-abstract class InfiniteScrollListener(pageSize:Int) : RecyclerView.OnScrollListener() {
+abstract class InfiniteScrollListener(pageSize: Int) : RecyclerView.OnScrollListener() {
     private var visibleThreshold = pageSize
+    private var nextPage = 0
     var previousTotalItemCount = 0
     var loading = false
 
@@ -42,12 +43,13 @@ abstract class InfiniteScrollListener(pageSize:Int) : RecyclerView.OnScrollListe
         }
 
         if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
-            loadMore()
+            nextPage += 1
+            loadMore(nextPage)
             loading = true
         }
     }
 
-    abstract fun loadMore()
+    abstract fun loadMore(page: Int)
 
     fun resetState() {
         previousTotalItemCount = 0

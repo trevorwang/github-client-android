@@ -18,6 +18,7 @@ import mingsin.github.R
 import mingsin.github.data.GithubApiService
 import mingsin.github.databinding.FragmentTrendingBinding
 import mingsin.github.databinding.ItemTrendingBinding
+import mingsin.github.extension.toast
 import mingsin.github.model.Repository
 import mingsin.github.view.InfiniteScrollListener
 import rx.android.schedulers.AndroidSchedulers
@@ -32,31 +33,28 @@ class TrendingFragment : BaseFragment() {
     @Inject lateinit var api: GithubApiService
     @Inject lateinit var lanUtils: LanguageUtility
     lateinit var adapter: TrendingAdapter
+    private lateinit var binding: FragmentTrendingBinding
     override fun onInject() {
         activityComponent.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = DataBindingUtil.inflate<FragmentTrendingBinding>(inflater, R.layout.fragment_trending, container, false)
+    override fun onCreateContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DataBindingUtil.inflate<FragmentTrendingBinding>(inflater, R.layout.fragment_trending, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = DataBindingUtil.getBinding<FragmentTrendingBinding>(view)
         binding.rvRepos.layoutManager = LinearLayoutManager(context)
         adapter = TrendingAdapter(context, lanUtils)
         binding.rvRepos.adapter = adapter
         binding.rvRepos.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-
         binding.rvRepos.addOnScrollListener(object : InfiniteScrollListener(10) {
-            override fun loadMore() {
-                Logger.v("loadMore...........")
-                loadData(adapter.repos.last().id.toString())
+            override fun loadMore(page: Int) {
+                Logger.v("loadMore.......page : %d", page)
+                loadData(page)
             }
         })
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -64,13 +62,16 @@ class TrendingFragment : BaseFragment() {
         loadData()
     }
 
-    private fun loadData(since: String? = null) {
-        subscriptions.add(api.trending("created:>2016-12-17", "star", "desc", since).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    private fun loadData(page: Int = 1) {
+        subscriptions.add(api.trending("created:>2016-12-17", page = page).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Logger.v("get repos %s", it)
                     adapter.repos += it.items
+                    hideLoadingView()
+                    dataInited = true
                 }) {
                     Logger.e(it, "")
+                    hideLoadingView()
                 })
     }
 
@@ -79,8 +80,13 @@ class TrendingFragment : BaseFragment() {
     class TrendingAdapter(val context: Context, val languageUtility: LanguageUtility) : RecyclerView.Adapter<ItemHolder<ItemTrendingBinding>>() {
         var repos: List<Repository> = ArrayList()
             set(value) {
+                val oldSize = field.size
                 field = value
-                notifyDataSetChanged()
+                if (oldSize < field.size) {
+                    notifyItemRangeInserted(oldSize, field.size)
+                } else {
+                    notifyDataSetChanged()
+                }
             }
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemHolder<ItemTrendingBinding> {

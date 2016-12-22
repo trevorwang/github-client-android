@@ -28,9 +28,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toggle.syncState()
         binding.navView.setNavigationItemSelectedListener(this)
 
-        val fragment = TrendingFragment()
+        val fragment = DashboardFragment()
         switchTo(fragment)
-
     }
 
     fun switchTo(fragment: Fragment) {

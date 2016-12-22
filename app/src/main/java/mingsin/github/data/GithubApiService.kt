@@ -22,6 +22,6 @@ interface GithubApiService {
     fun trending(@Query("q") q: String,
                  @Query("sorts") sorts: String = "star",
                  @Query("order") order: String = " desc",
-                 @Query("since") since: String? = null): Observable<RepositoryResult>
+                 @Query("page") page: Int = 1): Observable<RepositoryResult>
 
 }
