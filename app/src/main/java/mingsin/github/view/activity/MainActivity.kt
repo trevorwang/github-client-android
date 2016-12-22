@@ -7,14 +7,17 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
+import android.util.SparseArray
 import android.view.MenuItem
 import mingsin.github.R
 import mingsin.github.databinding.ActivityMainBinding
+import mingsin.github.view.fragment.BaseFragment
 import mingsin.github.view.fragment.DashboardFragment
 import mingsin.github.view.fragment.TrendingFragment
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     lateinit var drawer: DrawerLayout
+    val fragmentList: SparseArray<BaseFragment> = SparseArray()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -28,12 +31,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toggle.syncState()
         binding.navView.setNavigationItemSelectedListener(this)
 
-        val fragment = DashboardFragment()
-        switchTo(fragment)
+        selectDrawerMenuItem(R.id.nav_dashboard)
     }
 
-    fun switchTo(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+    fun switchTo(fragment: Fragment?) {
+        if (fragment == null) {
+            return
+        }
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(fragment.tag).commit()
     }
 
     override fun onInject() {
@@ -49,17 +54,24 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_camera -> {
-                val fragment = DashboardFragment()
-                switchTo(fragment)
-            }
-
-            R.id.nav_gallery -> {
-                switchTo(TrendingFragment())
-            }
-        }
+        selectDrawerMenuItem(item.itemId)
         drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun selectDrawerMenuItem(itemId: Int) {
+        var fragment = fragmentList.get(itemId)
+        if (fragment == null) {
+            when (itemId) {
+                R.id.nav_dashboard -> {
+                    fragment = DashboardFragment()
+                }
+                R.id.nav_trending -> {
+                    fragment = TrendingFragment()
+                }
+            }
+        }
+        switchTo(fragment)
+        fragmentList.put(itemId, fragment)
     }
 }

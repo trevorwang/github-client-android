@@ -18,6 +18,7 @@ import mingsin.github.R
 import mingsin.github.data.GithubApiService
 import mingsin.github.databinding.FragmentTrendingBinding
 import mingsin.github.databinding.ItemTrendingBinding
+import mingsin.github.databinding.RecyclerviewFooterBinding
 import mingsin.github.extension.toast
 import mingsin.github.model.Repository
 import mingsin.github.view.InfiniteScrollListener
@@ -48,7 +49,7 @@ class TrendingFragment : BaseFragment() {
         binding.rvRepos.layoutManager = LinearLayoutManager(context)
         adapter = TrendingAdapter(context, lanUtils)
         binding.rvRepos.adapter = adapter
-        binding.rvRepos.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+//        binding.rvRepos.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         binding.rvRepos.addOnScrollListener(object : InfiniteScrollListener(10) {
             override fun loadMore(page: Int) {
                 Logger.v("loadMore.......page : %d", page)
@@ -57,8 +58,8 @@ class TrendingFragment : BaseFragment() {
         })
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         loadData()
     }
 
@@ -77,31 +78,53 @@ class TrendingFragment : BaseFragment() {
 
     class ItemHolder<out T : ViewDataBinding>(val binding: T) : RecyclerView.ViewHolder(binding.root)
 
-    class TrendingAdapter(val context: Context, val languageUtility: LanguageUtility) : RecyclerView.Adapter<ItemHolder<ItemTrendingBinding>>() {
+    class TrendingAdapter(val context: Context, val languageUtility: LanguageUtility) : RecyclerView.Adapter<ItemHolder<ViewDataBinding>>() {
+        val ITEM_TYPE_FOOTER = 0x100
         var repos: List<Repository> = ArrayList()
             set(value) {
                 val oldSize = field.size
                 field = value
                 if (oldSize < field.size) {
-                    notifyItemRangeInserted(oldSize, field.size)
+                    notifyItemRangeChanged(oldSize, itemCount)
                 } else {
                     notifyDataSetChanged()
                 }
             }
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemHolder<ItemTrendingBinding> {
+        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemHolder<ViewDataBinding> {
             val inflater = LayoutInflater.from(context)
+            if (viewType == ITEM_TYPE_FOOTER) {
+                val footerBinding = DataBindingUtil.inflate<RecyclerviewFooterBinding>(inflater, R.layout.recyclerview_footer, parent, false)
+                return ItemHolder(footerBinding)
+            }
+
             val binding = DataBindingUtil.inflate<ItemTrendingBinding>(inflater, R.layout.item_trending, parent, false)
-            return ItemHolder(binding)
+            return ItemHolder<ItemTrendingBinding>(binding)
         }
 
-        override fun onBindViewHolder(holder: ItemHolder<ItemTrendingBinding>?, position: Int) {
-            val repo = repos[position]
-            holder?.binding?.repo = repo
-            holder?.binding?.lanUtility = languageUtility
-            holder?.binding?.root?.setOnClickListener { v ->
-                openProjectPage(repo)
+
+        override fun onBindViewHolder(holder: ItemHolder<ViewDataBinding>?, position: Int) {
+            val binding = holder?.binding
+            when (binding) {
+                is ItemTrendingBinding -> {
+                    val repo = repos[position]
+                    binding.repo = repo
+                    binding.lanUtility = languageUtility
+                    binding.root.setOnClickListener { v ->
+                        openProjectPage(repo)
+                    }
+                }
+                is RecyclerviewFooterBinding -> {
+
+                }
             }
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            if (repos.size == position) {
+                return ITEM_TYPE_FOOTER
+            }
+            return super.getItemViewType(position)
         }
 
         private fun openProjectPage(repo: Repository) {
@@ -111,7 +134,10 @@ class TrendingFragment : BaseFragment() {
         }
 
         override fun getItemCount(): Int {
-            return repos.count()
+            if (repos.isEmpty()) {
+                return 0
+            }
+            return repos.count() + 1
         }
     }
 
