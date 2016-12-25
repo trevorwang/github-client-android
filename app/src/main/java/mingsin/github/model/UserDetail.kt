@@ -7,7 +7,7 @@ import java.util.*
  */
 data class UserDetail(var user: User,
                       var name: String,
-                      var compony: String,
+                      var company: String,
                       var blog: String,
                       var location: String,
                       var email: String,
@@ -16,7 +16,7 @@ data class UserDetail(var user: User,
                       var publicRepos: Int,
                       var publicGists: Int,
                       var followers: Int,
-                      var folloowing: Int,
+                      var following: Int,
                       var createdAt: Date,
-                      var updateedAt: Date
+                      var updatedAt: Date
 )

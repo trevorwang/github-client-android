@@ -28,8 +28,8 @@ interface GithubApiService {
 
 
     @GET("users")
-    fun users(): Observable<List<User>>
+    fun users(@Query("since") since:String = "0"): Observable<List<User>>
 
-    @GET("users/{id}")
-    fun userDetail(@Path("id") id: Int): Observable<UserDetail>
+    @GET("users/{username}")
+    fun userDetail(@Path("username") username: String): Observable<UserDetail>
 }
