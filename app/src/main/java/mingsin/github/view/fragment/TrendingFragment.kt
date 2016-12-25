@@ -16,7 +16,7 @@ import mingsin.github.LanguageUtility
 import mingsin.github.R
 import mingsin.github.data.GithubApiService
 import mingsin.github.databinding.FragmentTrendingBinding
-import mingsin.github.databinding.ItemTrendingBinding
+import mingsin.github.databinding.ItemRepoBinding
 import mingsin.github.databinding.RecyclerviewFooterBinding
 import mingsin.github.model.Repository
 import mingsin.github.view.InfiniteScrollListener
@@ -95,15 +95,15 @@ class TrendingFragment : BaseFragment() {
                 return ItemHolder(footerBinding)
             }
 
-            val binding = DataBindingUtil.inflate<ItemTrendingBinding>(inflater, R.layout.item_trending, parent, false)
-            return ItemHolder<ItemTrendingBinding>(binding)
+            val binding = DataBindingUtil.inflate<ItemRepoBinding>(inflater, R.layout.item_repo, parent, false)
+            return ItemHolder<ItemRepoBinding>(binding)
         }
 
 
         override fun onBindViewHolder(holder: ItemHolder<ViewDataBinding>?, position: Int) {
             val binding = holder?.binding
             when (binding) {
-                is ItemTrendingBinding -> {
+                is ItemRepoBinding -> {
                     val repo = repos[position]
                     binding.repo = repo
                     binding.lanUtility = languageUtility
