@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/iv_avatar"
-                android:text="@{user.avatarUrl}" />
+                android:text="@{user.login}" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </layout>
