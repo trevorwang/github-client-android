@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 
 /**
  * Created by trevorwang on 25/12/2016.
@@ -24,7 +25,6 @@ fun bindEditText(view: EditText, bindableString: BindableString) {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
-
         })
 
         if (view.text.toString() != bindableString.value) {
@@ -47,5 +47,5 @@ fun bindImageSrc(view: ImageView, src: String?) {
     if (src == null) {
         return
     }
-//    Glide.with(view.context).load(src).into(view)
+    Glide.with(view.context).load(src).into(view)
 }

@@ -14,6 +14,7 @@ import mingsin.github.databinding.ActivityMainBinding
 import mingsin.github.view.fragment.BaseFragment
 import mingsin.github.view.fragment.DashboardFragment
 import mingsin.github.view.fragment.TrendingFragment
+import mingsin.github.view.fragment.UserFragment
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     lateinit var drawer: DrawerLayout
@@ -68,6 +69,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 }
                 R.id.nav_trending -> {
                     fragment = TrendingFragment()
+                }
+                R.id.nav_user -> {
+                    fragment = UserFragment()
                 }
             }
         }

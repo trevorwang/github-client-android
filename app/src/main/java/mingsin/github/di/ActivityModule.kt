@@ -1,5 +1,6 @@
 package mingsin.github.di
 
+import android.view.LayoutInflater
 import dagger.Module
 import dagger.Provides
 import mingsin.github.view.activity.BaseActivity
@@ -12,5 +13,10 @@ class ActivityModule(val activity: BaseActivity) {
     @Provides
     fun activity(): BaseActivity {
         return activity
+    }
+
+    @Provides
+    fun inflater(): LayoutInflater {
+        return LayoutInflater.from(activity)
     }
 }
