@@ -20,6 +20,7 @@ import mingsin.github.databinding.ItemTrendingBinding
 import mingsin.github.databinding.RecyclerviewFooterBinding
 import mingsin.github.model.Repository
 import mingsin.github.view.InfiniteScrollListener
+import mingsin.github.view.ItemHolder
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.*
@@ -73,7 +74,6 @@ class TrendingFragment : BaseFragment() {
                 })
     }
 
-    class ItemHolder<out T : ViewDataBinding>(val binding: T) : RecyclerView.ViewHolder(binding.root)
 
     class TrendingAdapter(val context: Context, val languageUtility: LanguageUtility) : RecyclerView.Adapter<ItemHolder<ViewDataBinding>>() {
         val ITEM_TYPE_FOOTER = 0x100
